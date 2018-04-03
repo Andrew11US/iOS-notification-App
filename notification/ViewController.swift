@@ -13,54 +13,46 @@ import UserNotifications
 class ViewController: UIViewController {
 
     let center = UNUserNotificationCenter.current()
-    let content = UNMutableNotificationContent()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { (result, error) in
+        requestNotificationAuthorization(notificationCenter: center)
+        presentNotification(title: "Hello", subtitle: "Again", body: "message", interval: 5, repeats: false)
+        
+    }
+    
+    func presentNotification(title: String, subtitle: String, body: String, interval: TimeInterval, repeats: Bool) {
+        
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        
+        content.title = title
+        content.subtitle = subtitle
+        content.body = body
+        content.sound = UNNotificationSound.default()
+        content.badge = 1
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: repeats)
+        
+        let request = UNNotificationRequest(identifier: "contentId", content: content, trigger: trigger)
+        
+        center.add(request) { (error) in
+            if error != nil {
+                debugPrint("Error: \(error.debugDescription)")
+            }
+        }
+    }
+    
+    func requestNotificationAuthorization(notificationCenter: UNUserNotificationCenter) {
+        
+        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { (result, error) in
             
             if error != nil {
                 debugPrint("Error occured: \(error.debugDescription)")
             }
         }
-        
-        
-        center.add(presentNotification(content: content)) { (error) in
-            if error != nil {
-                print("error \(String(describing: error))")
-            }
-        }
     }
-    
-    //create the content for the notification
-//    let content = UNMutableNotificationContent()
-    
-    func presentNotification(content: UNMutableNotificationContent) -> UNNotificationRequest {
-        
-        content.title = " Jurassic Park"
-        content.subtitle = "Lunch"
-        content.body = "Its lunch time at the park, please join us for a dinosaur feeding"
-        content.sound = UNNotificationSound.default()
-        
-//        trigger = UNTimeIntervalNotificationTrigger(timeInterval:2.0, repeats: false)
-        
-        return UNNotificationRequest(identifier: "ContentIdentifier", content: content, trigger: UNTimeIntervalNotificationTrigger(timeInterval:2.0, repeats: false))
-    }
-    
-    
-    //notification trigger can be based on time, calendar or location
-//    let trigger = UNTimeIntervalNotificationTrigger(timeInterval:2.0, repeats: false)
-    
-    //create request to display
-//    let request = UNNotificationRequest(identifier: "ContentIdentifier", content: content, trigger: trigger)
-    
-    //add request to notification center
-//    center.add(request) { (error) in
-//    if error != nil {
-//    print("error \(String(describing: error))")
-//    }
-//    }
 
 
 }
