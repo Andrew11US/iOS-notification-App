@@ -18,8 +18,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         requestNotificationAuthorization(notificationCenter: center)
-        presentNotification(title: "Hello", subtitle: "Again", body: "message", interval: 5, repeats: false)
-        
     }
     
     func presentNotification(title: String, subtitle: String, body: String, interval: TimeInterval, repeats: Bool) {
@@ -54,6 +52,10 @@ class ViewController: UIViewController {
         }
     }
 
-
+    @IBAction func notifyTapped(_ sender: Any) {
+        
+        presentNotification(title: "Hello", subtitle: "World", body: "message...", interval: 3, repeats: false)
+    }
+    
 }
 
